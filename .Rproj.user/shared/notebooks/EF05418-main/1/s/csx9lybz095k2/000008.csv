@@ -1,0 +1,3 @@
+"0",""
+"0","#set.seed(5673)"
+"0","#wordcloud2(data = tmp, size = 2)"

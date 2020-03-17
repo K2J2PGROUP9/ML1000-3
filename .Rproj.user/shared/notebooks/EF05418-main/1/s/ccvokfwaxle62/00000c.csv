@@ -1,0 +1,7 @@
+"0","ggplot(customerData1, aes(number_of_reviews, price)) +"
+"0","  th + theme(axis.title = element_text(), axis.title.x = element_text()) +"
+"0","  geom_point(aes(size = price), alpha = 0.05, color = ""slateblue"") +"
+"0","  xlab(""Number of reviews"") +"
+"0","  ylab(""Price"") +"
+"0","  ggtitle(""Relationship between number of reviews"","
+"0","          subtitle = ""The most expensive objects have small number of reviews (or 0)"")"

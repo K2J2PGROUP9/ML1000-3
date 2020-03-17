@@ -1,0 +1,8 @@
+"0","ggplot(customerData1, aes(availability_365, price)) +"
+"0","  th +"
+"0","  geom_point(alpha = 0.2, color = ""slateblue"") +"
+"0","  geom_density(stat = ""identity"", alpha = 0.2) +"
+"0","  xlab(""Availability during year"") +"
+"0","  ylab(""Price"") +"
+"0","  ggtitle(""Relationship between availability"","
+"0","          subtitle = ""there is not clear relationship"") "

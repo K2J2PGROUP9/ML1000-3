@@ -1,0 +1,2 @@
+"0","  #annotate(""text"", x = 1800, y = 0.75,label = paste(""Mean price = "", paste0(round(mean(customerData1$price), 2), ""$"")),"
+"0","  #         color =  ""#32CD32"", size = 8)"

@@ -1,0 +1,64 @@
+"0","customerData <- data %>% "
+"0","  mutate( last_review= as.Date(last_review)) "
+"0","         "
+"0","customerData <- customerData %>% "
+"0","  mutate( last_review= as.numeric(as.Date(""2020-02-15"")-last_review)) "
+"0",""
+"0","customerData <- customerData %>% "
+"0","  mutate( room_type= as.numeric(room_type) )"
+"0",""
+"0","#customerData <- customerData %>% "
+"0","#  mutate(last_review = as.numeric(as.Date(""2020-02-15"")-last_review))"
+"0",""
+"0","glimpse(customerData)"
+"1","Observations: 23,398
+"
+"1","Variables: 16
+"
+"1","$ id                             [3m[38;5;246m<int>[39m[23m 1419, 8077, 12604, 23691, 26654, 27423, 30931, 40456, 41887, 43964, 44452, 45...
+"
+"1",""
+"1","$ name                           [3m[38;5;246m<fct>[39m[23m ""Beautiful home in amazing area!"", ""Downtown Harbourfront Private Room"", ""Sea...
+"
+"1",""
+"1","$ host_id                        [3m[38;5;246m<int>[39m[23m 1565, 22795, 48239, 93825, 113345, 118124, 22795, 174063, 183071, 192364, 195...
+"
+"1",""
+"1","$ host_name                      [3m[38;5;246m<fct>[39m[23m Alexandra, Kathie & Larry, Rona, Yohan & Sarah, Adela, Brent, Kathie & Larry,...
+"
+"1",""
+"1","$ neighbourhood_group            [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N...
+"
+"1",""
+"1","$ neighbourhood                  [3m[38;5;246m<fct>[39m[23m Little Portugal, Waterfront Communities-The Island, Annex, Briar Hill-Belgrav...
+"
+"1",""
+"1","$ latitude                       [3m[38;5;246m<dbl>[39m[23m 43.64617, 43.64105, 43.66724, 43.69602, 43.64530, 43.66890, 43.64151, 43.6353...
+"
+"1",""
+"1","$ longitude                      [3m[38;5;246m<dbl>[39m[23m -79.42451, -79.37628, -79.41598, -79.45468, -79.38940, -79.32592, -79.37643, ...
+"
+"1",""
+"1","$ room_type                      [3m[38;5;246m<dbl>[39m[23m 1, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 3, 1,...
+"
+"1",""
+"1","$ price                          [3m[38;5;246m<int>[39m[23m 469, 99, 66, 72, 199, 54, 133, 99, 69, 90, 121, 121, 105, 121, 54, 65, 65, 87...
+"
+"1",""
+"1","$ minimum_nights                 [3m[38;5;246m<int>[39m[23m 4, 180, 1, 1, 4, 120, 180, 30, 2, 2, 1, 1, 1, 1, 91, 30, 30, 30, 2, 1, 6, 30,...
+"
+"1",""
+"1","$ number_of_reviews              [3m[38;5;246m<int>[39m[23m 7, 169, 0, 217, 39, 26, 1, 109, 82, 30, 50, 78, 18, 55, 24, 23, 16, 11, 67, 4...
+"
+"1",""
+"1","$ last_review                    [3m[38;5;246m<dbl>[39m[23m 803, 2363, NA, 55, 40, 3091, 3475, 99, 166, 194, 53, 100, 259, 115, 461, 57, ...
+"
+"1",""
+"1","$ reviews_per_month              [3m[38;5;246m<dbl>[39m[23m 0.13, 1.32, NA, 1.84, 0.35, 0.22, 0.01, 0.94, 2.09, 0.79, 0.44, 0.69, 0.16, 0...
+"
+"1",""
+"1","$ calculated_host_listings_count [3m[38;5;246m<int>[39m[23m 1, 2, 1, 2, 5, 1, 2, 5, 2, 1, 13, 13, 13, 13, 1, 6, 6, 6, 2, 13, 2, 1, 1, 13,...
+"
+"1",""
+"1","$ availability_365               [3m[38;5;246m<int>[39m[23m 0, 0, 0, 0, 365, 0, 365, 250, 270, 365, 363, 363, 222, 292, 179, 288, 305, 31...
+"

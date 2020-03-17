@@ -1,0 +1,3 @@
+"0","airbnb_train <- customerData1 %>% sample_frac(.7) %>% filter(price > 0)"
+"0","airbnb_test  <- anti_join(customerData1, airbnb_train, by = 'id') %>% filter(price > 0)"
+"0",""

@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1584459017698.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "2B8DE3D3",
+    "lastKnownWriteTime" : 1584478891,
+    "last_content_update" : 1584478891882,
+    "path" : "D:/github/ML1000-32/scripts/main.Rmd",
+    "project_path" : "scripts/main.Rmd",
+    "properties" : {
+        "cursorPosition" : "130,11",
+        "scrollLine" : "126"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -1,0 +1,3 @@
+"0","# make the images flow nicely"
+"0","knitr::opts_chunk$set(fig.pos = 'H', echo = T,comment = NA, prompt = F, "
+"0","                      cache = F, warning = F, message = F,  fig.align=""center"")"
