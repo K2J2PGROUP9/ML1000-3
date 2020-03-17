@@ -1,0 +1,305 @@
+---
+title: Toronto Airbnb data mining. Application of Supervised Learning Methods and Unsupervised Learning Methods
+author:
+  - name: Ketao Li
+    affiliation: York University
+    email:  liketao@yahoo.com
+  - name: Kush Halani
+    affiliation: York University
+    email:  kush.halani@ontariotechu.net
+  - name: Josue Romain
+    affiliation: York University
+    email:  josue.rolland.romain@gmail.com    
+  - name: Juan Peña
+    affiliation: York University
+    email:  jppena62@my.yorku.ca
+ 
+abstract: >
+  Toronto Airbnb rental price is depent on many factors.We try to identify these factors and make a rental price prediction.  
+
+output:
+  rticles::rjournal_article:
+    includes:
+      in_header: preamble.tex
+   
+---
+
+```{r echo=FALSE, message=FALSE, warnings=FALSE}
+# Clean all variables that might be left by other script to avoid collusion
+rm(list=ls(all=TRUE))
+# load required libraries
+library(ggplot2) # plotting lib
+library(gridExtra) # arrange grids
+library(dplyr)  # data manipuation
+library(RColorBrewer) # color palettes
+library(tm) # text mining
+library(dbscan) # density-based clustering
+library(wordcloud) # plots fequent terms
+library(factoextra) # deals with cluster plotting. Provides cluster related utility methods 
+library(cluster) # for gower similarity and pam
+library(plot3D) # 3D plots
+library(summarytools)
+library(purrr)
+library(wordcloud2)
+library(rworldmap)
+library(lubridate)
+library(VIM)
+source('utils.R') # supplementary code
+library(leaflet)
+library(caret) # predictive models
+
+# set summarytools global parameters
+st_options(plain.ascii = F,       # This is very handy in all Rmd documents
+      style = "rmarkdown",        # This too
+      footnote = NA,             # Avoids footnotes which would clutter the result
+      subtitle.emphasis = F,  # This is a setting to experiment with - according to
+      dfSummary.graph.col = F
+)  
+
+# pick a palette
+mainPalette = ggplotColours()
+```
+
+```{r global_options, include=FALSE}
+# make the images flow nicely
+knitr::opts_chunk$set(fig.pos = 'H', echo = T,comment = NA, prompt = F, 
+                      cache = F, warning = F, message = F,  fig.align="center")
+```
+
+
+## Background
+
+Airbnb has seen a meteoric growth since its inception in 2008 with the number of rentals listed on its website growing exponentially each year. Airbnb has successfully disrupted the traditional hospitality industry as more and more travellers, not just the ones who are looking for a bang for their buck but also business travellers resort to Airbnb as their premier accommodation provider.
+New York City has been one of the hottest markets for Airbnb, with over 52,000 listings as of November 2018. This means there are over 40 homes being rented out per square km. in NYC on Airbnb! One can perhaps attribute the success of Airbnb in NYC to the high rates charged by the hotels, which are primarily driven by the exorbitant rental prices in the city.
+
+## Objective
+
+The objective of customers segment according to their purchase history, is to turn them into loyal customers by recommending products of their choice.
+
+
+
+# Data Analysis
+
+Typically e-commerce datasets are proprietary and consequently hard to find among publicly available data. However, The UCI Machine Learning Repository has made this dataset containing actual transactions from 2010 and 2011.The data set used for this research contains 540k of transaction from UK retailer. The data has been sourced from [Kaggle](https://www.kaggle.com/carrie1/ecommerce-data). 
+
+
+## Data Dictionary
+
+
+Column Name                 | Column Description  
+------------------------------| ---------------------------- 
+id                            | listing ID
+name                          | name of the listing
+host_id                       | host ID
+host_name                     | Number of items bought
+neighbourhood_group           | location
+neighbourhood                 | area
+latitude                      | latitude coordinates
+longitude                     | longitude coordinates
+room_type                     | listing space type
+price                         | price in dollars
+minimum_nights                | amount of nights minimum
+number_of_reviews             | number of reviews
+last_review                   | latest review
+reviews_per_month             | number of reviews per month
+calculated_host_listings_count| amount of listing per host
+availability_365              | number of days when listing is available for booking
+
+## Data Exploration
+
+Firstly we are going to load and examine content and statistics of the data set
+
+```{r}
+data = read.csv("../data/AB_TOR_2019.csv", header = T, 
+                na.strings = c("NA","","#NA"),sep=",")
+```
+
+```{r dataset_summary1, echo=FALSE, results="asis"}
+print(dfSummary(data, valid.col = F, max.distinct.values = 3, heading = F),
+      caption = "\\label{tab:dataset_summary1} Online Retail Dataset Summary", scalebbox = .9)
+```
+
+From the above summary, we can find that there are some negative values for Quantity and UnitPrice.These values don't make sense, so we'll delete them directly.
+
+```{r}
+#head(data)
+summary(data)
+#str(data)
+```
+##Missing data
+```{r plot_notes2,  echo=FALSE, fig.align="center", fig.cap="Missing data"}
+
+a = aggr(data)
+plot(a)
+
+```
+
+```{r}
+summary(a)
+```
+There are some missing data for CustomerID and Desciption, we just remove them directly considering we have enough data.
+
+```{r dataset_summary2, echo=FALSE, results="asis"}
+
+ pal <- colorFactor(palette = c("red", "green", "blue", "purple", "yellow"), domain = data$neighbourhood)
+ 
+ leaflet(data = data) %>% addProviderTiles(providers$CartoDB.DarkMatterNoLabels) %>%  addCircleMarkers(~longitude, ~latitude, color = ~pal(neighbourhood), weight = 1, radius=1, fillOpacity = 0.1, opacity = 0.1,
+                                                                                                        label = paste("Name:", data$name)) %>% 
+     addLegend("bottomright", pal = pal, values = ~neighbourhood,
+     title = "Neighbourhood groups",
+     opacity = 1
+   )
+
+```
+
+
+We need do some some data transformation and add one new variant total.
+```{r}
+customerData <- data %>% 
+  mutate( last_review= as.Date(last_review)) 
+         
+customerData <- customerData %>% 
+  mutate( last_review= as.numeric(as.Date("2020-02-15")-last_review)) 
+
+customerData <- customerData %>% 
+  mutate( room_type= as.numeric(room_type) )
+
+#customerData <- customerData %>% 
+#  mutate(last_review = as.numeric(as.Date("2020-02-15")-last_review))
+
+glimpse(customerData)
+
+```
+
+
+We need do some some data transformation and add one new variant total.
+```{r}
+
+customerData1 = subset(customerData,select = -neighbourhood_group)
+customerData1 = customerData1 %>%filter(complete.cases(.)) 
+
+glimpse(customerData1)
+#b = aggr(customerData1)
+#plot(b)
+
+```
+
+
+
+
+
+```{r include=FALSE}
+
+
+```
+
+
+
+#### Descriptive Features.
+
+*Description* is free-text features that might provide additional insights about the customer shopping. We are going to take a close look at this feature and decide if we could utilize it.
+
+Lets' begin with the *Description*
+```{r plot_notes,  echo=FALSE, fig.align="center", fig.cap="Most Common Words in Description"}
+description = data %>%  mutate(text = trimws(name)) %>% filter(!is.na(text)) %>% select(text)
+pCorups = VCorpus(VectorSource(description))
+pCorups  = tm_map(pCorups , removeNumbers)
+pCorups  = tm_map(pCorups , removePunctuation)
+pTermMatrix = tm::TermDocumentMatrix(pCorups)
+tmp = as.matrix(pTermMatrix)
+tmp = sort(rowSums(tmp),decreasing=T)
+tmp = data.frame(word = names(tmp),freq=tmp)
+set.seed(5673)
+wordcloud(words = tmp$word, freq = tmp$freq, min.freq = 70,max.words=80, random.order=F,
+          rot.per=0.35, colors=mainPalette)
+
+#set.seed(5673)
+#wordcloud2(data = tmp, size = 2)
+```
+From the word cloud, we can get some highly frequently used words such as set,red,box,lunch,blue,box,paper,glass.
+
+Unfortunately *Description* feature does not provide more knowledge to what the others features already supply. Thus it will be dropped.
+
+Country gives information about the country were the customer lives.
+
+
+The custumers are from 38 different countries. Lets visualize this.
+
+
+
+# Modeling and Evalutation
+
+In this section we will apply various clustering methods to cluster the customer based rfm. We will use Partitioning clustering and Hierarchical clustering approaches. 
+
+Before we apply clustering models to the dataset we should assess clustering tendency. In order to do so we will employ **Hopkins** statistics.
+
+```{r}
+airbnb_train <- customerData1 %>% sample_frac(.7) %>% filter(price > 0)
+airbnb_test  <- anti_join(customerData1, airbnb_train, by = 'id') %>% filter(price > 0)
+
+```
+It is time to run feature selection algorithm.
+```{r}
+
+learn <- airbnb_train %>% filter(price < quantile(airbnb_train$price, 0.9) & price > quantile(airbnb_train$price, 0.1)) %>% tidyr::drop_na()
+second_model <- lm(log(price) ~ room_type + latitude + longitude 
+                        + number_of_reviews + availability_365
+                       + reviews_per_month + 
+                     calculated_host_listings_count + minimum_nights, data = learn)
+# Summarize the results
+summary(second_model)
+
+```
+
+```{r plot_feature_selection,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Number of Predictors vs Accuracy", out.width="1.1\\linewidth"}
+plot(second_model)
+```
+
+
+Figure \ref{fig:plot_feature_selection} illustrates that the accuracy practically flattens out when a number of predictors reaches 8. The accuracy improves a bit more when a number of features reaches 15 but the gain is negligible. Here is the list of features ordered by importance. We take first nine for model training.
+
+```{r echo=FALSE}
+airbnb_test <- airbnb_test %>% filter(price <= quantile(airbnb_train$price, 0.9) & price >= quantile(airbnb_train$price, 0.1)) %>% tidyr::drop_na()
+pred_regression <- predict(second_model, newdata = airbnb_test)
+pred_regression <- exp(pred_regression)
+
+RMSE_regression <- sqrt(mean( (airbnb_test$price - pred_regression)**2 ))
+
+SSE <- sum((airbnb_test$price - pred_regression)**2)
+SSR <- sum((pred_regression - mean(airbnb_test$price)) ** 2)
+R2 <- 1 - SSE/(SSE + SSR)
+RMSE_regression
+
+R2
+
+
+
+```
+
+
+# Model Deployment
+
+Fortunately we can state that the clustering methods were  effective for the selected dataset. We do believe it might have a real live application. The model can segment customer successfully.
+
+# Conclusion
+
+We selected **e-commerce** dataset hoping to discover the relationship between various attributes, which would segment the customer into different groups. 
+
+We spent significant efforts parsing and cleaning the data. Then we separated redundant and useful features. We add new features according to our requirement.
+
+We also processed descriptive features applying data mining techniques. We counted the most frequently used terms to understand the content of the features. We counted the words. we successfully identified the most common words and phrase .
+
+When the data preprocessing was done we measured Hopkins statistics to evaluate cluster tendency of the data set. The result was satisfactory; we proceeded with the clusterization. 
+
+We have applied two different clustering algorithm. Choosing between k-means and hierarchical clustering is not easy. We compare the two kinds of groups with the actual expected result, we decided to adopt k-means. 
+
+Overall we were able to apply unsupervised learning to reach our goal, and also we develop one shiny app to present our product.
+
+
+
+\bibliography{RJreferences}
+
+
+# Note from the Authors
+
+This file was generated using [_The R Journal_ style article template](https://github.com/rstudio/rticles), additional information on how to prepare articles for submission is here - [Instructions for Authors](https://journal.r-project.org/share/author-guide.pdf). The article itself is an executable R Markdown file that could be [downloaded from Github](https://github.com/ivbsoftware/big-data-final-2/blob/master/docs/R_Journal/big-data-final-2/) with all the necessary artifacts.
