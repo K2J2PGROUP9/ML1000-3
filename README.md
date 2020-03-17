@@ -1,9 +1,9 @@
-## ML1000-2
-York University. ML1000 - Machine Learning in Business Context. Assignment #2 - Clustering Problem
+## ML1000-3
+York University. ML1000 - Machine Learning in Business Context. Assignment #3 
 
 ## Project Structure
 
-* Project presentation document: **Customer-segmentation**.  
+* Project presentation document: **Airbnb-Toronto-data-mining**.  
 * **data** folder contains the project data sets and trained model file. 
 * **script** folder contains the script that generates the report.
 * **shiny** folder includes the shiny app deployment files.
@@ -16,7 +16,7 @@ To run the project code:
 
 ## Shiny App
 
-URL: [customer segmentation](https://li-ketao.shinyapps.io/shiny-customer-seg/)
+URL: [Airbnb toronto rental rate prediction](https://li-ketao.shinyapps.io/ML1000-3/)
 
 To run the application locally, just execute:
 ./shiny/app.R
