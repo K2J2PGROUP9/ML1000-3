@@ -3,7 +3,7 @@ York University. ML1000 - Machine Learning in Business Context. Assignment #3
 
 ## Project Structure
 
-* Project presentation document: **Airbnb-Toronto-data-mining**.  
+* Project presentation document: **Toronto-Airbnb-data-research**.  
 * **data** folder contains the project data sets and trained model file. 
 * **script** folder contains the script that generates the report.
 * **shiny** folder includes the shiny app deployment files.
