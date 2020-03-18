@@ -1,5 +1,5 @@
 ---
-title: Toronto Airbnb data mining. Application of Supervised Learning Methods and Unsupervised Learning Methods
+title: Toronto Airbnb data research. Application of Supervised Learning Methods and Unsupervised Learning Methods
 author:
   - name: Ketao Li
     affiliation: York University
@@ -15,7 +15,7 @@ author:
     email:  jppena62@my.yorku.ca
  
 abstract: >
-  Toronto Airbnb rental rate is depent on many factors.We try to identify these factors and make a rental price prediction.  
+  From thousands of listings in different cities, Airbnb has become a massive sink of information. Data provided by homeowners are often big, messy, yet, extremely useful. The goal of this project is to extract knowledge from these datasets by applying techniques and methodologies common in data mining.As more homeowners put their properties on the platform, Airbnb is able to suggest appropriate prices for the listings based on machine learning models trained over large sets of data. Our team aims to predict the prices of the listings in Toronto, to allow homeowners to price their properties appropriately. Specifically, we seek to answer the following question: What prices should Airbnb suggest to their hosts given a set of features about the listing? This question is important because as more data becomes available, more intelligence can be extracted using modern machine learning tools. Therefore, it is worthwhile in exploring data driven analyses similar to those presented in this report as they are likely to improve experience for both hosts and customers, and ultimately add value to the company.Our team also try to cluster the listings in groups.
 
 output:
   rticles::rjournal_article:
@@ -76,42 +76,53 @@ knitr::opts_chunk$set(fig.pos = 'H', echo = T,comment = NA, prompt = F,
 ## Background
 
 Airbnb has seen a meteoric growth since its inception in 2008 with the number of rentals listed on its website growing exponentially each year. Airbnb has successfully disrupted the traditional hospitality industry as more and more travellers, not just the ones who are looking for a bang for their buck but also business travellers resort to Airbnb as their premier accommodation provider.
-Toronto has been one of the hottest markets for Airbnb in Canada, with over 26,000 listings as of Feb 2020. This means there are over 40 homes being rented out per square km. in Toronto on Airbnb! One can perhaps attribute the success of Airbnb in Toronto to the high rates charged by the hotels, which are primarily driven by the exorbitant rental prices in the city.
+Toronto has been one of the hottest markets for Airbnb in Canada, with over 26,000 listings as of Feb 2020. This means there are over 40 homes being rented out per square km in Toronto on Airbnb! One can perhaps attribute the success of Airbnb in Toronto to the high rates charged by the hotels, which are primarily driven by the exorbitant rental prices in the city.
 
 ## Objective
 
 The objective of customers segment according to their purchase history, is to turn them into loyal customers by recommending products of their choice.
 
+This study pursues two goals. The main objective is to predict the airbnb rental rate as accurate as possible. We will employ CRISP-DM methodology (Ref: \cite{mining}) and supervised learning approach, to achieve this goal.
+
+We are also motivated to cluster the toronto airbnb listings in groups. The questions we will try to address are:
+
+* If there are specific groups of listings that share similar features 
+* If yes, how to use these group information for business.
+
+To achieve the second goal we will use unsupervised learning approach.
 
 
 # Data Analysis
 
-Typically e-commerce datasets are proprietary and consequently hard to find among publicly available data. However, The UCI Machine Learning Repository has made this dataset containing actual transactions from 2010 and 2011.The data set used for this research contains 540k of transaction from UK retailer. The data has been sourced from [Kaggle](https://www.kaggle.com/carrie1/ecommerce-data). 
+This research employs the data set sourced from [Airbnb](http://insideairbnb.com/get-the-data.html). This real-life data comprises 26000 observations of the listing information of Toronto on Feb 14,2020.
+
 
 
 ## Data Dictionary
 
 
 Column Name                   | Column Description  
-------------------------------| ---------------------------- 
+------------------------------|----------------------------------------------------------------------------------
 id                            | listing ID
-name                          | name of the listing
-host_id                       | host ID
-host_name                     | Number of items bought
-neighbourhood_group           | location
-neighbourhood                 | area
-latitude                      | latitude coordinates
-longitude                     | longitude coordinates
-room_type                     | listing space type
-price                         | price in dollars
-minimum_nights                | amount of nights minimum
-number_of_reviews             | number of reviews
-last_review                   | latest review
-reviews_per_month             | number of reviews per month
+name                          | Listing Title
+host_id                       | ID of Host
+host_name                     | Name of Host
+neighbourhood_group           | Borough that contains listing
+neighbourhood                 | Name of neighbourhood that listing is in
+latitude                      | latitude coordinates of listing
+longitude                     | longitude coordinates of listing
+room_type                     | Type of public space that is being offered
+price                         | price per night in dollars
+minimum_nights                | minimum number of nights required to book listing
+number_of_reviews             | total number of reviews that listing has accumulated
+last_review                   | date in which listing was last reviewed
+reviews_per_month             | total number of reviews divided by the number of months the listing is active
 calculated_host_listings_count| amount of listing per host
-availability_365              | number of days when listing is available for booking
+availability_365              | number of days per year the listing is active
 
 ## Data Exploration
+
+### Statistics
 
 Firstly we are going to load and examine content and statistics of the data set
 
@@ -122,17 +133,29 @@ data = read.csv("../data/AB_TOR_2019.csv", header = T,
 
 ```{r dataset_summary1, echo=FALSE, results="asis"}
 print(dfSummary(data, valid.col = F, max.distinct.values = 3, heading = F),
-      caption = "\\label{tab:dataset_summary1} Online Retail Dataset Summary", scalebbox = .9)
+      caption = "\\label{tab:dataset_summary1} Toronto Airbnb Dataset Summary", scalebbox = .9)
 ```
 
 From the above summary, we can find that there are some negative values for Quantity and UnitPrice.These values don't make sense, so we'll delete them directly.
 
 ```{r}
 #head(data)
-summary(data)
+#summary(data)
 #str(data)
 ```
-##Missing data
+Table \ref{tab:dataset_summary} describes main statistical parameters of each column. Here is a look at the data sample.
+
+```{r data_head, results='asis', echo=FALSE}
+library(xtable) # nice table formats
+print(xtable(data[1:12,1:8]), include.rownames = F, scalebox=.6)
+print (xtable(data[1:12,9:16],
+  caption = "\\label{tab:dataset_head} Toronto Airbnb Data Sample"), include.rownames = F,
+  scalebox = .6)
+```
+
+
+
+###Missing data
 ```{r plot_notes2,  echo=FALSE, fig.align="center", fig.cap="Missing data"}
 
 a = aggr(data)
@@ -143,29 +166,11 @@ plot(a)
 ```{r}
 summary(a)
 ```
-There are some missing data for CustomerID and Desciption, we just remove them directly considering we have enough data.
+There are some missing data for neighbourhood_group,last_review and reviews_per_month.It's very strange that most of the neighbourhood_group miss in Toronto.We decide to ignore this feature. 
 
-```{r dataset_summary2, echo=FALSE, results="asis"}
+### Data Transformation
 
- pal <- colorFactor(palette = c("red", "green", "blue", "purple", "yellow"), domain = data$neighbourhood)
- 
- leaflet(data = data) %>% addProviderTiles(providers$CartoDB.DarkMatterNoLabels) %>%  addCircleMarkers(~longitude, ~latitude, color = ~pal(neighbourhood), weight = 1, radius=1, fillOpacity = 0.1, opacity = 0.1,
-                                                                                                        label = paste("Name:", data$name)) %>% 
-     addLegend("bottomright", pal = pal, values = ~neighbourhood,
-     title = "Neighbourhood groups",
-     opacity = 1
-   )
-
-```
-
-
-
-
-
-
-
-
-We need do some some data transformation and add one new variant total.
+We need do some some data transformation.
 ```{r}
 customerData <- data %>% 
   mutate( last_review= as.Date(last_review)) 
@@ -179,22 +184,91 @@ customerData <- customerData %>%
 #customerData <- customerData %>% 
 #  mutate(last_review = as.numeric(as.Date("2020-02-15")-last_review))
 
-glimpse(customerData)
+#glimpse(customerData)
 
 ```
 
-
-We need do some some data transformation and add one new variant total.
+We drop neighbourhood_group and other missing data.
 ```{r}
 
 customerData1 = subset(customerData,select = -neighbourhood_group)
 customerData1 = customerData1 %>%filter(complete.cases(.)) 
-
 glimpse(customerData1)
 #b = aggr(customerData1)
 #plot(b)
 
 ```
+###data visualization
+```{r results='hold'}
+# histogram with added parameters
+hist(customerData1$number_of_reviews,
+main="number_of_reviews",
+xlab="number_of_reviews",
+breaks=10000,
+xlim=c(0,300),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+
+```{r results='hold'}
+# histogram with added parameters
+hist(customerData1$last_review,
+main="last_review",
+xlab="last_review",
+breaks=10000,
+xlim=c(0,300),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+```{r results='hold'}
+# histogram with added parameters
+hist(customerData1$availability_365,
+main="availability_365",
+xlab="availability_365",
+breaks=10000,
+xlim=c(0,300),
+col="darkmagenta",
+freq=FALSE
+)
+```
+Hosts on Airbnb offer a wide variety of spaces, ranging from shared rooms to private islands.
+
+All homes are grouped into the following three room types:
+
+Entire place
+Private room
+Shared room
+hotel room
+
+Entire place
+Entire places are best if you're seeking a home away from home. With an entire place, you'll have the whole space to yourself. This usually includes a bedroom, a bathroom, a kitchen, and a separate, dedicated entrance. Hosts should note in the description if they'll be on the property or not (e.g.: "Host occupies first floor of the home"), and provide further details on the listing.
+
+Private rooms
+Private rooms are great for when you prefer a little privacy, and still value a local connection. When you book a private room, you'll have your own private room for sleeping and may share some spaces with others. You might need to walk through indoor spaces that another host or guest may occupy to get to your room.
+
+Shared rooms
+Shared rooms are for when you don't mind sharing a space with others. When you book a shared room, you'll be sleeping in a space that is shared with others and share the entire space with other people. Shared rooms are popular among flexible travellers looking for new friends and budget-friendly stays.
+```{r }
+room = customerData1 %>%
+  group_by(room_type = factor(room_type, labels = c("Entire home/apt","Hotel room","Private room","Shared room")))  %>%
+  summarise(COUNT = n())
+p1 = ggplot(room,aes(x=room_type, y = COUNT, fill = room_type)) + 
+      geom_bar(stat = "identity", alpha = 0.7) +  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank())
+plot(p1)
+```
+
+```{r }
+mytable <- table(customerData1$room_type)
+lbls <-  c("Entire home/apt","Hotel room","Private room","Shared room")
+pie(mytable, labels = lbls,col=rainbow(length(lbls)),
+   main="Pie Chart of room")
+   
+```   
 
 Price
 The most important (target) variable is price.
@@ -239,7 +313,11 @@ ggplot(customerData1, aes(availability_365, price)) +
   ylab("Price") +
   ggtitle("Relationship between availability",
           subtitle = "there is not clear relationship") 
+
+
+
 ```
+
 It’s hard to see clear pattern, but there’s a lot of expensive objects with few available days and many available days.
 
 Price & Number Of Reviews
@@ -289,11 +367,10 @@ ggplot(data, aes(x = room_type, y = price)) +
 
 ```
 
-Map of the top 50 most expensive listings
+Map of the top 20 most expensive listings
 ```{r }
 
-
-# get top 50 listings by price
+# get top 20 listings by price
 top_df <- customerData1 %>% top_n(n = 20, wt = price)
 
 # get background map
@@ -314,7 +391,6 @@ ggmap(top_map) +
 
 
 ```
-
 
 Median price by neighborhood
 In the map below, each dot is one neighborhood. The size of the dot depends on the number of listings and the color of the dot depends on the median price in that neighborhood.
@@ -342,11 +418,11 @@ ggmap(map) +
     scale_color_gradient(low = "blue", high = "red")
 ```
 
-#### Descriptive Features.
+### Descriptive Features.
 
-*Description* is free-text features that might provide additional insights about the customer shopping. We are going to take a close look at this feature and decide if we could utilize it.
+*name * is free-text features that might provide additional insights about the listing. We are going to take a close look at this feature and decide if we could utilize it.
 
-Lets' begin with the *Description*
+Lets' begin with the *name*
 ```{r plot_notes,  echo=FALSE, fig.align="center", fig.cap="Most Common Words in Description"}
 description = data %>%  mutate(text = trimws(name)) %>% filter(!is.na(text)) %>% select(text)
 pCorups = VCorpus(VectorSource(description))
@@ -363,29 +439,37 @@ wordcloud(words = tmp$word, freq = tmp$freq, min.freq = 70,max.words=80, random.
 #set.seed(5673)
 #wordcloud2(data = tmp, size = 2)
 ```
-From the word cloud, we can get some highly frequently used words such as set,red,box,lunch,blue,box,paper,glass.
+From the word cloud, we can get some highly frequently used words such as downtown,bedroom,room,condo,private,apartment.
 
-Unfortunately *Description* feature does not provide more knowledge to what the others features already supply. Thus it will be dropped.
-
-Country gives information about the country were the customer lives.
+Unfortunately *name* feature does not provide more knowledge to what the others features already supply. Thus it will be dropped.
 
 
-The custumers are from 38 different countries. Lets visualize this.
-
-
-
-# Modeling and Evalutation
+# Regression Models and Model Performance Evalutation
 
 In this section we will apply various clustering methods to cluster the customer based rfm. We will use Partitioning clustering and Hierarchical clustering approaches. 
 
-Before we apply clustering models to the dataset we should assess clustering tendency. In order to do so we will employ **Hopkins** statistics.
 
 ```{r}
 airbnb_train <- customerData1 %>% sample_frac(.7) %>% filter(price > 0)
 airbnb_test  <- anti_join(customerData1, airbnb_train, by = 'id') %>% filter(price > 0)
 
 ```
-It is time to run feature selection algorithm.
+
+##1st Linear Regression model
+```{r}
+first_model <- train(price ~ latitude + longitude + room_type + minimum_nights  + availability_365 , data = airbnb_train, method = "lm")
+summary(first_model)
+
+```
+This model is not so good. Median residual error is -22.9, while it should be near 0. R2=0.06 is also not so good.
+
+Let’s plot the first model.
+```{r plot_feature_selection1,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Number of Predictors vs Accuracy", out.width="1.1\\linewidth"}
+plot(first_model$finalModel)
+
+
+```
+##2nd Linear Regression model
 ```{r}
 
 learn <- airbnb_train %>% filter(price < quantile(airbnb_train$price, 0.9) & price > quantile(airbnb_train$price, 0.1)) %>% tidyr::drop_na()
@@ -397,13 +481,13 @@ second_model <- lm(log(price) ~ room_type + latitude + longitude
 summary(second_model)
 
 ```
-
+This model is an improvement. Median residual error is now -0.014, which is far better than -22.9 from the first model. R2=0.371 means that this model explains about 50% variance of target variable.
+Obviously we choose the second model for the prediction.
 ```{r plot_feature_selection,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Number of Predictors vs Accuracy", out.width="1.1\\linewidth"}
 plot(second_model)
 ```
 
-
-Figure \ref{fig:plot_feature_selection} illustrates that the accuracy practically flattens out when a number of predictors reaches 8. The accuracy improves a bit more when a number of features reaches 15 but the gain is negligible. Here is the list of features ordered by importance. We take first nine for model training.
+##Predict prices for training set
 
 ```{r echo=FALSE}
 airbnb_test <- airbnb_test %>% filter(price <= quantile(airbnb_train$price, 0.9) & price >= quantile(airbnb_train$price, 0.1)) %>% tidyr::drop_na()
@@ -449,23 +533,352 @@ ggplotly(regression_plot)
 
 ```
 
+# Undertanding the listing Employing Unsupervised Learning
+
+In this section we will apply various clustering methods to cluster the listings in several groups. We will use Partitioning clustering and Hierarchical clustering approaches. 
+
+Before we apply clustering models to the dataset we should assess clustering tendency. In order to do so we will employ **Hopkins** statistics.
+
+## Hopkins Statistics
+
+Hopkins statistic is used to assess the clustering tendency of a dataset by measuring the probability that a given dataset is generated by a uniform data distribution.(Ref: \cite{mining}).
+Let's calculate Hopkins (**H**) statistics for customerData1:
+
+The **H** value close to one indicates very good clustering tendency. The **H** value around or greater than 0.5 denotes poor clustering tendency(Ref: \cite{factoextra}). 
+```{r}
+
+customerData2 = subset(customerData1,select = -id)
+customerData2 = subset(customerData2,select = -name)
+customerData2 = subset(customerData2,select = -host_id)
+customerData2 = subset(customerData2,select = -host_name)
+customerData2 = subset(customerData2,select = -neighbourhood)
+
+customerData2 <- customerData2 %>% 
+mutate(
+       latitude = scale(latitude),
+       longitude = scale(longitude),
+       price = scale(price),
+       minimum_nights = scale(minimum_nights),
+       number_of_reviews = scale(number_of_reviews),
+       last_review = scale(last_review),
+       reviews_per_month  = scale(reviews_per_month ),
+       calculated_host_listings_count = scale(calculated_host_listings_count),
+       availability_365 = scale(availability_365)
+)
+#summary(customerData2)
+
+```
+```{r}
+H =  get_clust_tendency(customerData2,n = 100, graph = F, seed = 6709)
+print(H[["hopkins_stat"]])
+```
+Perfect! H value is very close to 1. The dataset is clustrable.
+
+## Partitioning Clustering Approach 
+
+At first, we use Elbow method to get optimal number of clusters for k-means clustering:
+```{r }
+
+set.seed(123)
+# Elbow method
+fviz_nbclust(customerData2, kmeans, method = "wss") +
+    geom_vline(xintercept = 4, linetype = 2)+
+  labs(subtitle = "Elbow method")
+
+```
+
+It seems that the optimal number of clusters is 4.
+
+Let's use kmeans to cluster the dataset.
+
+```{r results='hold'}
+set.seed(123)
+k2 <- kmeans(customerData2, centers = 4, nstart = 25)
+#k2
+fviz_cluster(k2, data = customerData2)
+
+
+```
+
+```{r results='hold'}
+group <- k2$cluster
+customerData3 <- cbind(customerData1, group)
+#write.csv(customerData3, "../shiny/www/mydata1.csv")
+
+```
+
+## Hierarchical clustering approache 
+
+```{r results='hold'}
+set.seed(123)
+d <- dist(customerData2)
+c <- hclust(d, method = 'ward.D2')
+
+plot(c)
+```
+
+
+```{r results='hold'}
+members <- cutree(c,k = 4)
+
+table(members)
+#members
+```
+We decide to accept the kmeans cluster result.
+K-means clustering with 4 clusters of sizes group1 = 2649, group2 = 9925, group3 = 2800, group4 = 3649
+```{r results='hold'}
+group1 <- customerData3 %>% 
+  filter(group == 1)
+
+group2 <- customerData3 %>% 
+  filter(group == 2)
+
+group3 <- customerData3 %>% 
+  filter(group == 3)
+
+group4 <- customerData3 %>% 
+  filter(group == 4)
+
+```
+Let's dig out why the listings are clustered to 4 groups.
+At first, let's observe every group's geographic distribution.
+```{r, fig.height=7}
+leaflet(group1 %>% select(longitude,latitude)) %>%
+  setView(lng = -79.38, lat = 43.75,zoom = 11) %>%
+   addTiles() %>% 
+  addMarkers(
+  clusterOptions = markerClusterOptions())
+```
+
+```{r, fig.height=7}
+leaflet(group2 %>% select(longitude,latitude)) %>%
+  setView(lng = -79.38, lat = 43.75,zoom = 11) %>%
+   addTiles() %>% 
+  addMarkers(
+  clusterOptions = markerClusterOptions())
+```
+
+```{r, fig.height=7}
+leaflet(group3 %>% select(longitude,latitude)) %>%
+  setView(lng = -79.38, lat = 43.75,zoom = 11) %>%
+   addTiles() %>% 
+  addMarkers(
+  clusterOptions = markerClusterOptions())
+```
+
+```{r, fig.height=7}
+leaflet(group4 %>% select(longitude,latitude)) %>%
+  setView(lng = -79.38, lat = 43.75,zoom = 11) %>%
+   addTiles() %>% 
+  addMarkers(
+  clusterOptions = markerClusterOptions())
+```
+
+From the geographic distribution, we can observe that group4, most of the listings are far from downtown.
+
+Let's observe every group's price distribution.
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group1$price,
+main="group1Price",
+xlab="group1Price",
+breaks=100000,
+xlim=c(0,500),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group2$price,
+main="group2Price",
+xlab="group2Price",
+breaks=100000,
+xlim=c(0,500),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group3$price,
+main="group3Price",
+xlab="group3Price",
+breaks=100000,
+xlim=c(0,500),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group4$price,
+main="group4Price",
+xlab="group4Price",
+breaks=100000,
+xlim=c(0,500),
+col="darkmagenta",
+freq=FALSE
+)
+```
+Obviously in group4, The vast majority of rental prices are concentrated below 100$.
+
+Let's list every group's median price. 
+
+```{r }
+median(group1$price)
+median(group2$price)
+median(group3$price)
+median(group4$price)
+
+```
+In group1, the rental price is median.
+Group4 is the cheapest.
+Group2 & Group3 has the same median price.
+
+We're interested in what's the difference between group2 and group3.
+Let's dig it further.
+
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group2$minimum_nights,
+main="group2 minimum_nights",
+xlab="minimum_nights",
+breaks=10000,
+xlim=c(0,100),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group3$minimum_nights,
+main="group3 minimum_nights",
+xlab="minimum_nights",
+breaks=10000,
+xlim=c(0,100),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group2$number_of_reviews,
+main="group2 number_of_reviews",
+xlab="minimum_nights",
+breaks=10000,
+xlim=c(0,500),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group3$number_of_reviews,
+main="group3 number_of_reviews",
+xlab="number_of_reviews",
+breaks=10000,
+xlim=c(0,500),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+It seems that the group3 has more reviews that group2.
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group2$last_review,
+main="group2 last_review",
+xlab="last_review",
+breaks=10000,
+xlim=c(0,200),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group3$last_review,
+main="group3 last_review",
+xlab="last_review",
+breaks=10000,
+xlim=c(0,200),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group2$availability_365,
+main="group2 availability_365",
+xlab="last_review",
+breaks=10000,
+xlim=c(0,200),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group3$availability_365,
+main="group3 availability_365",
+xlab="last_review",
+breaks=10000,
+xlim=c(0,200),
+col="darkmagenta",
+freq=FALSE
+)
+```
+It seems that the group3 has more availability_365 that group2.
+Let's summarize every group's characteristic.
+
+Group1: the rental rate is median.
+Group2: the rental rate is high, and the attention is low because there are less reviews in this group.Since most of listings in this group are located in downtown,they have Convenient transportation.
+Group3: the rental rate is high, and the attention is high because there are more reviews in this group.Since most of listings in this group are located in downtown,they have Convenient transportation.
+Group4: the rental rate is low.
+
+Some potential business value:
+Airbnb can recommeded the listings in group 4 for the customers that have high price sensetivity.
+The listings in group2 can be recommended to the customers that prefer the convenient transportation and don't mind the attention.
+The listings in group3 can be recommended to the customers that prefer the convenient transportation and the high attention.
+The listings in group4 can be recommended to other customers.
+
 # Model Deployment
 
-Fortunately we can state that the clustering methods were  effective for the selected dataset. We do believe it might have a real live application. The model can segment customer successfully.
+
+In our second regression model, metrics for testing set: R2=0.285 and RMSE=42.18. Is it good enough? It is hard to tell. We feel
+that the model meets our first objective, which is prediction of toronto airbnb rental rate.
+The second logistic regression model we picked is more accurate.
+The model is fast and easy to deploy. Due to the nature of the business the model does require frequent data updates and
+re-training.
+We are also very satisfied with accomplishment of our second goal, which is understanding of the
+listing. We believe that clustering make sense for business.
 
 # Conclusion
 
-We selected **e-commerce** dataset hoping to discover the relationship between various attributes, which would segment the customer into different groups. 
+Through exploring toronto airbnb listings dataset collected in 2020 we were able to come up with two models. One is a linear regression model,that predicts the property owner's rental rate. The second model provides in-depth view of the listings.  
 
-We spent significant efforts parsing and cleaning the data. Then we separated redundant and useful features. We add new features according to our requirement.
+The study started with thorough analysis of the data set. At this phase we were able to identified many interesting patterns that insured the success of the whole project. We commenced our research providing descriptive stats on all available features of the data set. 
 
-We also processed descriptive features applying data mining techniques. We counted the most frequently used terms to understand the content of the features. We counted the words. we successfully identified the most common words and phrase .
+Then we applied and evaluated two supervised learning algorithms: two kinds of Logistic Regression.
 
-When the data preprocessing was done we measured Hopkins statistics to evaluate cluster tendency of the data set. The result was satisfactory; we proceeded with the clusterization. 
+Lastly we applied unsupervised learning to understand how to cluster the listings in groups and find the potential business value.
 
-We have applied two different clustering algorithm. Choosing between k-means and hierarchical clustering is not easy. We compare the two kinds of groups with the actual expected result, we decided to adopt k-means. 
+As a result of this study we fully understood the data we dealt with. We designed reasonably accurate rental rate prediction model. We managed to group the listings into meaningful, highly interpretable clusters that explain the property's characteristics well.
 
-Overall we were able to apply unsupervised learning to reach our goal, and also we develop one shiny app to present our product.
+Overall we believe we have achieved all our goals. 
 
 
 
