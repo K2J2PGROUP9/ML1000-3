@@ -80,7 +80,46 @@ Toronto has been one of the hottest markets for Airbnb in Canada, with over 26,0
 
 ## Objective
 
-The objective of customers segment according to their purchase history, is to turn them into loyal customers by recommending products of their choice.
+The objective of this work is to help Airbnb's hosts to stablish a rental price for a place, using several models of prediction.
+
+
+# Apply the Ethical ML framework
+
+## In the Problem definition and scope step
+
+In the problem identification, we all agree in the group 9 that we want to develop a tool that help Airbnb's hosts to establish a rental price for a place, using several models of prediction.
+
+Although individuals could be identified by its places, those are not negatively impacted, there is not any personal identification and we will not use aggregate information from another sources.
+
+We can see that There could be a risk to individualize each person in the dataset if someone can access to another dataset that relate the the Host ID, the Hostname with the PII.
+
+## In the Design step
+
+To ensure we all interpreted the outputs of the model we clarify that we will find through the machine learning model selected, a sugested price for a place to rent in Toronto's Airbnb platform based in some features. 
+
+## In the data collection and retention step
+
+We just use data from the dataset AB_TOR_2019.
+
+In the dataset there is no any underrepresented group because is a full data about hosts in Toronto, but could be some kind of bias about locations where people from some countries use to live.
+
+## In data processing step
+
+Although there is information in the data set that can be used for a proxy ethnic backgrounnd, the risk is low and could be helpfull for people looking for a place that match with own ethnicity.
+
+We can identify a risk because we have some columns that could be used to re-identification, Host ID, Name and the location columns. The host id and name could be deleted to de-identify the data.
+
+## In the model prototyping and QA testing step
+
+The case we are working on, as is predicting prices for host services, is no so sensitive but the algorithms we are using for regression and clustering could be interpretable.
+
+In order to make the model fairer and more accuracy, it is important to take care with the outliers in the prices so the model would be better adjusted.
+
+## In the Deployment, Monitoring and Maintenance
+When using the model it is good to monitor the performance of it when update the dataset to take into account possible business model changes like taxes policies that could originate that the predictions could be wrong.
+
+
+
 
 
 
