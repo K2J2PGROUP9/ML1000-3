@@ -80,14 +80,23 @@ Toronto has been one of the hottest markets for Airbnb in Canada, with over 26,0
 
 ## Objective
 
-The objective of this work is to help Airbnb's hosts to stablish a rental price for a place, using several models of prediction.
+
+This study pursues two goals. The main objective is to predict the airbnb rental rate as accurate as possible. We will employ CRISP-DM methodology (Ref: \cite{mining}) and supervised learning approach, to achieve this goal.
+
+We are also motivated to cluster the toronto airbnb listings in groups. The questions we will try to address are:
+
+* If there are specific groups of listings that share similar features 
+* If yes, how to use these group information for business.
+
+To achieve the second goal we will use unsupervised learning approach.
+
 
 
 # Apply the Ethical ML framework
 
 ## In the Problem definition and scope step
 
-In the problem identification, we all agree in the group 9 that we want to develop a tool that help Airbnb's hosts to establish a rental price for a place, using several models of prediction.
+In the problem identification, we all agree in the group 9 that we want to develop a tool that help Airbnb's hosts to establish a rental price for a place as accurate as possible, also to cluster the existing listings based in similar features. we will be using several models of prediction and clustering.
 
 Although individuals could be identified by its places, those are not negatively impacted, there is not any personal identification and we will not use aggregate information from another sources.
 
@@ -118,17 +127,6 @@ In order to make the model fairer and more accuracy, it is important to take car
 ## In the Deployment, Monitoring and Maintenance
 When using the model it is good to monitor the performance of it when update the dataset to take into account possible business model changes like taxes policies that could originate that the predictions could be wrong.
 
-
-
-
-This study pursues two goals. The main objective is to predict the airbnb rental rate as accurate as possible. We will employ CRISP-DM methodology (Ref: \cite{mining}) and supervised learning approach, to achieve this goal.
-
-We are also motivated to cluster the toronto airbnb listings in groups. The questions we will try to address are:
-
-* If there are specific groups of listings that share similar features 
-* If yes, how to use these group information for business.
-
-To achieve the second goal we will use unsupervised learning approach.
 
 
 # Data Analysis
