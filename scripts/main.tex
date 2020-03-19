@@ -25,11 +25,12 @@ and customers, and ultimately add value to the company.Our team also try
 to cluster the listings in groups.
 }
 
-\begin{Schunk}
-\begin{Soutput}
-#> Warning: package 'ggmap' was built under R version 3.6.3
-\end{Soutput}
-\end{Schunk}
+\hypertarget{business-understanding}{%
+\subsection{1. Business Understanding}\label{business-understanding}}
+
+\hypertarget{determine-business-objectives}{%
+\subsection{1.1 Determine Business
+Objectives}\label{determine-business-objectives}}
 
 \hypertarget{background}{%
 \subsection{Background}\label{background}}
@@ -46,12 +47,51 @@ km in Toronto on Airbnb! One can perhaps attribute the success of Airbnb
 in Toronto to the high rates charged by the hotels, which are primarily
 driven by the exorbitant rental prices in the city.
 
-\hypertarget{objective}{%
-\subsection{Objective}\label{objective}}
+\hypertarget{businnes-objectives}{%
+\subsection{Businnes objectives}\label{businnes-objectives}}
 
-The objective of customers segment according to their purchase history,
-is to turn them into loyal customers by recommending products of their
-choice.
+\begin{itemize}
+\item
+  To stablish how do the location, room type, number of reviews,
+  availability, number of reviews, minimum nights and host listing count
+  can affect rental rates.
+\item
+  To establish some groups that can be suggested by Airbnb platform for
+  different kind of preferences.
+\end{itemize}
+
+\hypertarget{business-success-criteria}{%
+\subsection{Business success criteria}\label{business-success-criteria}}
+
+Give useful insights for current property owners or future ones to make
+more effective listing
+
+\hypertarget{assess-situation}{%
+\subsection{1.2 Assess Situation}\label{assess-situation}}
+
+\hypertarget{inventory-of-resources}{%
+\subsection{Inventory of resources}\label{inventory-of-resources}}
+
+Machine learning engineers - Ketao Li, Kush Halani, Josue Romain, Juan
+Peña
+
+Public Dataset: license CC0: Public Domain
+
+\begin{itemize}
+\tightlist
+\item
+  Toronto AIRBNB open data. Airbnb listing and metrics.
+  \href{http://insideairbnb.com/get-the-data.html}{Airbnb}
+\end{itemize}
+
+GitHub site. - \url{https://github.com/K2J2PGROUP9/ML1000-3}
+
+\hypertarget{determine-data-mining-goals}{%
+\subsection{1.3. Determine Data Mining
+Goals}\label{determine-data-mining-goals}}
+
+\hypertarget{data-minning-goals}{%
+\subsection{Data minning goals}\label{data-minning-goals}}
 
 This study pursues two goals. The main objective is to predict the
 airbnb rental rate as accurate as possible. We will employ CRISP-DM
@@ -71,112 +111,147 @@ The questions we will try to address are:
 
 To achieve the second goal we will use unsupervised learning approach.
 
-\hypertarget{data-analysis}{%
-\section{Data Analysis}\label{data-analysis}}
+\hypertarget{data-mining-success-criteria}{%
+\subsection{Data mining success
+criteria}\label{data-mining-success-criteria}}
+
+The success criteria of the model is to select the better accuracy based
+in the median residual error.
+
+\hypertarget{project-plan}{%
+\subsection{Project plan}\label{project-plan}}
+
+\begin{figure}
+\centering
+\includegraphics{Project Plan.PNG}
+\caption{PROJECT PLAN}
+\end{figure}
+
+\hypertarget{apply-the-ethical-ml-framework}{%
+\section{Apply the Ethical ML
+framework}\label{apply-the-ethical-ml-framework}}
+
+\hypertarget{in-the-problem-definition-and-scope-step}{%
+\subsection{In the Problem definition and scope
+step}\label{in-the-problem-definition-and-scope-step}}
+
+In the problem identification, we all agree in the group 9 that we want
+to develop a tool that help Airbnb's hosts to establish a rental price
+for a place as accurate as possible, also to cluster the existing
+listings based in similar features. we will be using several models of
+prediction and clustering.
+
+Although individuals could be identified by its places, those are not
+negatively impacted, there is not any personal identification and we
+will not use aggregate information from another sources.
+
+We can see that There could be a risk to individualize each person in
+the dataset if someone can access to another dataset that relate the the
+Host ID, the Hostname with the PII.
+
+\hypertarget{in-the-design-step}{%
+\subsection{In the Design step}\label{in-the-design-step}}
+
+To ensure we all interpreted the outputs of the model we clarify that we
+will find through the machine learning model selected, a sugested price
+for a place to rent in Toronto's Airbnb platform based in some features.
+
+\hypertarget{in-the-data-collection-and-retention-step}{%
+\subsection{In the data collection and retention
+step}\label{in-the-data-collection-and-retention-step}}
+
+We just use data from the dataset AB\_TOR\_2019.
+
+In the dataset there is no any underrepresented group because is a full
+data about hosts in Toronto, but could be some kind of bias about
+locations where people from some countries use to live.
+
+\hypertarget{in-data-processing-step}{%
+\subsection{In data processing step}\label{in-data-processing-step}}
+
+Although there is information in the data set that can be used for a
+proxy ethnic backgrounnd, the risk is low and could be helpfull for
+people looking for a place that match with own ethnicity.
+
+We can identify a risk because we have some columns that could be used
+to re-identification, Host ID, Name and the location columns. The host
+id and name could be deleted to de-identify the data.
+
+\hypertarget{in-the-model-prototyping-and-qa-testing-step}{%
+\subsection{In the model prototyping and QA testing
+step}\label{in-the-model-prototyping-and-qa-testing-step}}
+
+The case we are working on, as is predicting prices for host services,
+is no so sensitive but the algorithms we are using for regression and
+clustering could be interpretable.
+
+In order to make the model fairer and more accuracy, it is important to
+take care with the outliers in the prices so the model would be better
+adjusted.
+
+\hypertarget{in-the-deployment-monitoring-and-maintenance}{%
+\subsection{In the Deployment, Monitoring and
+Maintenance}\label{in-the-deployment-monitoring-and-maintenance}}
+
+When using the model it is good to monitor the performance of it when
+update the dataset to take into account possible business model changes
+like taxes policies that could originate that the predictions could be
+wrong.
+
+\hypertarget{data-understanding}{%
+\subsection{2 Data Understanding}\label{data-understanding}}
+
+\hypertarget{collect-initial-data}{%
+\subsection{2.1 Collect initial data}\label{collect-initial-data}}
+
+\hypertarget{initial-data-collection-report}{%
+\section{Initial data collection
+report}\label{initial-data-collection-report}}
 
 This research employs the data set sourced from
 \href{http://insideairbnb.com/get-the-data.html}{Airbnb}. This real-life
 data comprises 26000 observations of the listing information of Toronto
-on Feb 14,2020.
+on Feb 14,2020 with 16 features.
 
-\hypertarget{data-dictionary}{%
-\subsection{Data Dictionary}\label{data-dictionary}}
+\hypertarget{describe-data}{%
+\subsection{2.2 Describe data}\label{describe-data}}
+
+\hypertarget{data-description-report}{%
+\subsection{Data description report}\label{data-description-report}}
 
 \begin{longtable}[]{@{}ll@{}}
 \toprule
-\begin{minipage}[b]{0.25\columnwidth}\raggedright
-Column Name\strut
-\end{minipage} & \begin{minipage}[b]{0.69\columnwidth}\raggedright
-Column Description\strut
-\end{minipage}\tabularnewline
+Column Name & Column Description\tabularnewline
 \midrule
 \endhead
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-id\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-listing ID\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-name\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-Listing Title\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-host\_id\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-ID of Host\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-host\_name\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-Name of Host\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-neighbourhood\_group\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-Borough that contains listing\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-neighbourhood\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-Name of neighbourhood that listing is in\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-latitude\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-latitude coordinates of listing\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-longitude\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-longitude coordinates of listing\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-room\_type\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-Type of public space that is being offered\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-price\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-price per night in dollars\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-minimum\_nights\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-minimum number of nights required to book listing\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-number\_of\_reviews\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-total number of reviews that listing has accumulated\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-last\_review\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-date in which listing was last reviewed\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-reviews\_per\_month\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-total number of reviews divided by the number of months the listing is
-active\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-calculated\_host\_listings\_count\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-amount of listing per host\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.25\columnwidth}\raggedright
-availability\_365\strut
-\end{minipage} & \begin{minipage}[t]{0.69\columnwidth}\raggedright
-number of days per year the listing is active\strut
-\end{minipage}\tabularnewline
+id & listing ID\tabularnewline
+name & Listing Title\tabularnewline
+host\_id & ID of Host\tabularnewline
+host\_name & Name of Host\tabularnewline
+neighbourhood\_group & Borough that contains listing\tabularnewline
+neighbourhood & Name of neighbourhood that listing is in\tabularnewline
+latitude & latitude coordinates of listing\tabularnewline
+longitude & longitude coordinates of listing\tabularnewline
+room\_type & Type of public space that is being offered\tabularnewline
+price & price per night in dollars\tabularnewline
+minimum\_nights & minimum number of nights required to book
+listing\tabularnewline
+number\_of\_reviews & total number of reviews that listing has
+accumulated\tabularnewline
+last\_review & date in which listing was last reviewed\tabularnewline
+reviews\_per\_month & total number of reviews per month\tabularnewline
+calculated\_host\_listings\_count & amount of listing per
+host\tabularnewline
+availability\_365 & number of days per year the listing is
+active\tabularnewline
 \bottomrule
 \end{longtable}
 
 \hypertarget{data-exploration}{%
-\subsection{Data Exploration}\label{data-exploration}}
+\subsection{2.3 Data Exploration}\label{data-exploration}}
+
+\hypertarget{data-exploration-report}{%
+\subsection{Data exploration report}\label{data-exploration-report}}
 
 \hypertarget{statistics}{%
 \subsubsection{Statistics}\label{statistics}}
@@ -493,10 +568,6 @@ IQR (CV) : 225 (1)\strut
 \bottomrule
 \end{longtable}
 
-From the above summary, we can find that there are some negative values
-for Quantity and UnitPrice.These values don't make sense, so we'll
-delete them directly.
-
 \begin{Schunk}
 \begin{Sinput}
 #head(data)
@@ -508,8 +579,8 @@ delete them directly.
 Table \ref{tab:dataset_summary} describes main statistical parameters of
 each column. Here is a look at the data sample.
 
-\% latex table generated in R 3.6.2 by xtable 1.8-4 package \% Wed Mar
-18 16:29:28 2020
+\% latex table generated in R 3.6.3 by xtable 1.8-4 package \% Wed Mar
+18 20:50:17 2020
 
 \begin{table}[ht]
 \centering
@@ -535,8 +606,8 @@ id & name & host\_id & host\_name & neighbourhood\_group & neighbourhood & latit
 }
 \end{table}
 
-\% latex table generated in R 3.6.2 by xtable 1.8-4 package \% Wed Mar
-18 16:29:28 2020
+\% latex table generated in R 3.6.3 by xtable 1.8-4 package \% Wed Mar
+18 20:50:17 2020
 
 \begin{table}[ht]
 \centering
@@ -562,6 +633,12 @@ Entire home/apt & 469 &   4 &   7 & 2017-12-04 & 0.13 &   1 &   0 \\
 }
 \caption{\label{tab:dataset_head} Toronto Airbnb Data Sample} 
 \end{table}
+
+\hypertarget{verify-data-quality}{%
+\subsection{2.4 Verify data quality}\label{verify-data-quality}}
+
+\hypertarget{data-quality-report}{%
+\subsection{Data quality report}\label{data-quality-report}}
 
 \#\#\#Missing data
 
@@ -617,6 +694,9 @@ neighbourhood\_group miss in Toronto.We decide to ignore this feature.
 
 \hypertarget{data-transformation}{%
 \subsubsection{Data Transformation}\label{data-transformation}}
+
+\hypertarget{data-preparation}{%
+\subsection{3. Data preparation}\label{data-preparation}}
 
 We need do some some data transformation.
 
@@ -1016,13 +1096,44 @@ as downtown,bedroom,room,condo,private,apartment.
 Unfortunately \emph{name} feature does not provide more knowledge to
 what the others features already supply. Thus it will be dropped.
 
-\hypertarget{regression-models-and-model-performance-evalutation}{%
-\section{Regression Models and Model Performance
-Evalutation}\label{regression-models-and-model-performance-evalutation}}
+\hypertarget{modeling}{%
+\subsection{4. Modeling}\label{modeling}}
 
-In this section we will apply various clustering methods to cluster the
-customer based rfm. We will use Partitioning clustering and Hierarchical
-clustering approaches.
+\hypertarget{select-modeling-technique}{%
+\subsection{4.1 Select Modeling
+Technique}\label{select-modeling-technique}}
+
+\hypertarget{modeling-technique}{%
+\subsection{Modeling Technique}\label{modeling-technique}}
+
+As this is a price prediction problem, we are going to use Linear
+Regresion Model.
+
+\hypertarget{modeling-assumption}{%
+\subsection{Modeling assumption}\label{modeling-assumption}}
+
+The asumptions that the model has are:
+
+\begin{itemize}
+\tightlist
+\item
+  Variables are normally ditributed or transformed into it.
+\item
+  No or little multicolinearity.
+\item
+  No Auto-correlation.
+\item
+  No homoscedasticty.
+\end{itemize}
+
+\hypertarget{generate-test-design}{%
+\subsection{4.2 Generate test design}\label{generate-test-design}}
+
+\hypertarget{test-design}{%
+\subsection{Test design}\label{test-design}}
+
+For training purposes we are going to take 70\% of the data and left the
+30\% for testing.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -1030,6 +1141,9 @@ airbnb_train <- customerData1 %>% sample_frac(.7) %>% filter(price > 0)
 airbnb_test  <- anti_join(customerData1, airbnb_train, by = 'id') %>% filter(price > 0)
 \end{Sinput}
 \end{Schunk}
+
+\hypertarget{build-the-model}{%
+\subsection{4.3 Build the model}\label{build-the-model}}
 
 \#\#1st Linear Regression model
 
@@ -1063,6 +1177,12 @@ Multiple R-squared:  0.07377,   Adjusted R-squared:  0.07342
 F-statistic:   212 on 5 and 13307 DF,  p-value: < 2.2e-16
 \end{Soutput}
 \end{Schunk}
+
+\hypertarget{assess-model}{%
+\subsection{4.4 Assess Model}\label{assess-model}}
+
+\hypertarget{model-assessment}{%
+\subsection{Model assessment}\label{model-assessment}}
 
 This model is not so good. Median residual error is -22.9, while it
 should be near 0. R2=0.06 is also not so good.
@@ -1104,6 +1224,9 @@ Let's plot the first model.
 \end{figure}
 \end{Schunk}
 
+\hypertarget{build-the-model-1}{%
+\subsection{4.3 Build the model}\label{build-the-model-1}}
+
 \#\#2nd Linear Regression model
 
 \begin{Schunk}
@@ -1113,39 +1236,19 @@ second_model <- lm(log(price) ~ room_type + latitude + longitude
                         + number_of_reviews + availability_365
                        + reviews_per_month + 
                      calculated_host_listings_count + minimum_nights, data = learn)
-# Summarize the results
-summary(second_model)
 \end{Sinput}
-\begin{Soutput}
-
-Call:
-lm(formula = log(price) ~ room_type + latitude + longitude + 
-    number_of_reviews + availability_365 + reviews_per_month + 
-    calculated_host_listings_count + minimum_nights, data = learn)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--1.10574 -0.25653 -0.01645  0.24385  1.40928 
-
-Coefficients:
-                                 Estimate Std. Error t value Pr(>|t|)    
-(Intercept)                     1.395e+02  6.798e+00  20.516  < 2e-16 ***
-room_type                      -2.599e-01  3.848e-03 -67.554  < 2e-16 ***
-latitude                       -2.025e+00  8.371e-02 -24.190  < 2e-16 ***
-longitude                       5.796e-01  6.064e-02   9.557  < 2e-16 ***
-number_of_reviews              -4.187e-04  7.634e-05  -5.485 4.24e-08 ***
-availability_365                2.080e-04  2.860e-05   7.273 3.77e-13 ***
-reviews_per_month              -9.347e-04  2.136e-03  -0.438   0.6616    
-calculated_host_listings_count  3.435e-03  3.417e-04  10.052  < 2e-16 ***
-minimum_nights                 -2.221e-04  1.272e-04  -1.746   0.0809 .  
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.3523 on 10593 degrees of freedom
-Multiple R-squared:  0.3731,    Adjusted R-squared:  0.3726 
-F-statistic: 787.9 on 8 and 10593 DF,  p-value: < 2.2e-16
-\end{Soutput}
 \end{Schunk}
+
+\hypertarget{model-assessment-1}{%
+\subsection{Model assessment}\label{model-assessment-1}}
+
+summary(second\_model)
+
+\hypertarget{evaluation}{%
+\subsection{5. Evaluation}\label{evaluation}}
+
+\hypertarget{aproved-model}{%
+\subsection{Aproved model}\label{aproved-model}}
 
 This model is an improvement. Median residual error is now -0.014, which
 is far better than -22.9 from the first model. R2=0.371 means that this
@@ -1209,6 +1312,16 @@ choose the second model for the prediction.
 \section{Undertanding the listing Employing Unsupervised
 Learning}\label{undertanding-the-listing-employing-unsupervised-learning}}
 
+\hypertarget{modeling-1}{%
+\subsection{4. Modeling}\label{modeling-1}}
+
+\hypertarget{select-modeling-technique-1}{%
+\subsection{4.1 Select Modeling
+Technique}\label{select-modeling-technique-1}}
+
+\hypertarget{modeling-technique-1}{%
+\subsection{Modeling Technique}\label{modeling-technique-1}}
+
 In this section we will apply various clustering methods to cluster the
 listings in several groups. We will use Partitioning clustering and
 Hierarchical clustering approaches.
@@ -1265,6 +1378,9 @@ print(H[["hopkins_stat"]])
 
 Perfect! H value is very close to 1. The dataset is clustrable.
 
+\hypertarget{build-the-model-2}{%
+\subsection{4.3 Build the model}\label{build-the-model-2}}
+
 \hypertarget{partitioning-clustering-approach}{%
 \subsection{Partitioning Clustering
 Approach}\label{partitioning-clustering-approach}}
@@ -1311,6 +1427,9 @@ customerData3 <- cbind(customerData1, group)
 \end{Sinput}
 \end{Schunk}
 
+\hypertarget{build-the-model-3}{%
+\subsection{4.3 Build the model}\label{build-the-model-3}}
+
 \hypertarget{hierarchical-clustering-approache}{%
 \subsection{Hierarchical clustering
 approache}\label{hierarchical-clustering-approache}}
@@ -1342,6 +1461,12 @@ members
 2572 8164 2579 5708 
 \end{Soutput}
 \end{Schunk}
+
+\hypertarget{evaluation-1}{%
+\subsection{5. Evaluation}\label{evaluation-1}}
+
+\hypertarget{aproved-model-1}{%
+\subsection{Aproved model}\label{aproved-model-1}}
 
 We decide to accept the kmeans cluster result. K-means clustering with 4
 clusters of sizes group1 = 2649, group2 = 9925, group3 = 2800, group4 =
@@ -1686,16 +1811,20 @@ freq=FALSE
 It seems that the group3 has more availability\_365 that group2. Let's
 summarize every group's characteristic.
 
-Group1: the rental rate is median. Group2: the rental rate is high, and
-the attention is low because there are less reviews in this group.Since
-most of listings in this group are located in downtown,they have
-Convenient transportation. Group3: the rental rate is high, and the
-attention is high because there are more reviews in this group.Since
-most of listings in this group are located in downtown,they have
-Convenient transportation. Group4: the rental rate is low.
+Group1: the rental rate is median.
+
+Group2: the rental rate is high, and the attention is low because there
+are less reviews in this group.Since most of listings in this group are
+located in downtown,they have Convenient transportation.
+
+Group3: the rental rate is high, and the attention is high because there
+are more reviews in this group.Since most of listings in this group are
+located in downtown,they have Convenient transportation.
+
+Group4: the rental rate is low.
 
 Some potential business value: Airbnb can recommeded the listings in
-group 4 for the customers that have high price sensetivity. The listings
+group 1 for the customers that have high price sensetivity. The listings
 in group2 can be recommended to the customers that prefer the convenient
 transportation and don't mind the attention. The listings in group3 can
 be recommended to the customers that prefer the convenient

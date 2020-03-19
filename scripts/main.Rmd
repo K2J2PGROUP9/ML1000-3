@@ -105,7 +105,7 @@ Public Dataset: license CC0: Public Domain
   [Airbnb](http://insideairbnb.com/get-the-data.html)
 
 GitHub site.
--	https://github.com/K2J2PGROUP9/
+-	https://github.com/K2J2PGROUP9/ML1000-3
 
 
 ## 1.3.	Determine Data Mining Goals
@@ -188,24 +188,24 @@ This research employs the data set sourced from [Airbnb](http://insideairbnb.com
 ## Data description report
 
 
-Column Name                   | Column Description  
-------------------------------|----------------------------------------------------------------------------------
-id                            | listing ID
-name                          | Listing Title
-host_id                       | ID of Host
-host_name                     | Name of Host
-neighbourhood_group           | Borough that contains listing
-neighbourhood                 | Name of neighbourhood that listing is in
-latitude                      | latitude coordinates of listing
-longitude                     | longitude coordinates of listing
-room_type                     | Type of public space that is being offered
-price                         | price per night in dollars
-minimum_nights                | minimum number of nights required to book listing
-number_of_reviews             | total number of reviews that listing has accumulated
-last_review                   | date in which listing was last reviewed
-reviews_per_month             | total number of reviews divided by the number of months the listing is active
-calculated_host_listings_count| amount of listing per host
-availability_365              | number of days per year the listing is active
+Column Name                      | Column Description  
+---------------------------------|--------------------------------------------------------------
+id                               | listing ID
+name                             | Listing Title
+host_id                          | ID of Host
+host_name                        | Name of Host
+neighbourhood_group              | Borough that contains listing
+neighbourhood                    | Name of neighbourhood that listing is in
+latitude                         | latitude coordinates of listing
+longitude                        | longitude coordinates of listing
+room_type                        | Type of public space that is being offered
+price                            | price per night in dollars
+minimum_nights                   | minimum number of nights required to book listing
+number_of_reviews                | total number of reviews that listing has accumulated
+last_review                      | date in which listing was last reviewed
+reviews_per_month                | total number of reviews per month
+calculated_host_listings_count   | amount of listing per host
+availability_365                 | number of days per year the listing is active
 
 ## 2.3 Data Exploration
 
@@ -225,7 +225,6 @@ print(dfSummary(data, valid.col = F, max.distinct.values = 3, heading = F),
       caption = "\\label{tab:dataset_summary1} Toronto Airbnb Dataset Summary", scalebbox = .9)
 ```
 
-From the above summary, we can find that there are some negative values for Quantity and UnitPrice.These values don't make sense, so we'll delete them directly.
 
 ```{r}
 #head(data)
@@ -289,9 +288,12 @@ customerData1 = customerData1 %>%filter(complete.cases(.))
 glimpse(customerData1)
 #b = aggr(customerData1)
 #plot(b)
-
 ```
+
+
 ###data visualization
+
+
 ```{r results='hold'}
 # histogram with added parameters
 hist(customerData1$number_of_reviews,
@@ -1002,8 +1004,11 @@ It seems that the group3 has more availability_365 that group2.
 Let's summarize every group's characteristic.
 
 Group1: the rental rate is median.
+
 Group2: the rental rate is high, and the attention is low because there are less reviews in this group.Since most of listings in this group are located in downtown,they have Convenient transportation.
+
 Group3: the rental rate is high, and the attention is high because there are more reviews in this group.Since most of listings in this group are located in downtown,they have Convenient transportation.
+
 Group4: the rental rate is low.
 
 Some potential business value:
