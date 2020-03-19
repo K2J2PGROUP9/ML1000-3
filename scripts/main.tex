@@ -576,11 +576,11 @@ IQR (CV) : 225 (1)\strut
 \end{Sinput}
 \end{Schunk}
 
-Table \ref{tab:dataset_summary} describes main statistical parameters of
-each column. Here is a look at the data sample.
+Table \ref{tab:dataset_summary1} describes main statistical parameters
+of each column. Here is a look at the data sample.
 
-\% latex table generated in R 3.6.3 by xtable 1.8-4 package \% Wed Mar
-18 20:50:17 2020
+\% latex table generated in R 3.6.3 by xtable 1.8-4 package \% Thu Mar
+19 16:11:44 2020
 
 \begin{table}[ht]
 \centering
@@ -606,8 +606,8 @@ id & name & host\_id & host\_name & neighbourhood\_group & neighbourhood & latit
 }
 \end{table}
 
-\% latex table generated in R 3.6.3 by xtable 1.8-4 package \% Wed Mar
-18 20:50:17 2020
+\% latex table generated in R 3.6.3 by xtable 1.8-4 package \% Thu Mar
+19 16:11:44 2020
 
 \begin{table}[ht]
 \centering
@@ -640,7 +640,8 @@ Entire home/apt & 469 &   4 &   7 & 2017-12-04 & 0.13 &   1 &   0 \\
 \hypertarget{data-quality-report}{%
 \subsection{Data quality report}\label{data-quality-report}}
 
-\#\#\#Missing data
+\hypertarget{missing-data}{%
+\subsubsection{Missing data}\label{missing-data}}
 
 \begin{Schunk}
 \begin{figure}[H]
@@ -710,11 +711,6 @@ customerData <- customerData %>%
 
 customerData <- customerData %>% 
   mutate( room_type= as.numeric(room_type) )
-
-#customerData <- customerData %>% 
-#  mutate(last_review = as.numeric(as.Date("2020-02-15")-last_review))
-
-#glimpse(customerData)
 \end{Sinput}
 \end{Schunk}
 
@@ -745,13 +741,10 @@ $ reviews_per_month              <dbl> 0.13, 1.32, 1.84, 0.35, 0.22, 0.01, ...
 $ calculated_host_listings_count <int> 1, 2, 2, 5, 1, 2, 5, 2, 1, 13, 13, 1...
 $ availability_365               <int> 0, 0, 0, 365, 0, 365, 250, 270, 365,...
 \end{Soutput}
-\begin{Sinput}
-#b = aggr(customerData1)
-#plot(b)
-\end{Sinput}
 \end{Schunk}
 
-\#\#\#data visualization
+\hypertarget{data-visualization}{%
+\subsubsection{data visualization}\label{data-visualization}}
 
 \begin{Schunk}
 \begin{Sinput}
@@ -854,7 +847,7 @@ plot(p1)
 mytable <- table(customerData1$room_type)
 lbls <-  c("Entire home/apt","Hotel room","Private room","Shared room")
 pie(mytable, labels = lbls,col=rainbow(length(lbls)),
-   main="Pie Chart of room")
+   main="Pie Chart of room type")
 \end{Sinput}
 
 
@@ -1239,10 +1232,43 @@ second_model <- lm(log(price) ~ room_type + latitude + longitude
 \end{Sinput}
 \end{Schunk}
 
+\begin{Schunk}
+\begin{Sinput}
+summary(second_model)
+\end{Sinput}
+\begin{Soutput}
+
+Call:
+lm(formula = log(price) ~ room_type + latitude + longitude + 
+    number_of_reviews + availability_365 + reviews_per_month + 
+    calculated_host_listings_count + minimum_nights, data = learn)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.10574 -0.25653 -0.01645  0.24385  1.40928 
+
+Coefficients:
+                                 Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                     1.395e+02  6.798e+00  20.516  < 2e-16 ***
+room_type                      -2.599e-01  3.848e-03 -67.554  < 2e-16 ***
+latitude                       -2.025e+00  8.371e-02 -24.190  < 2e-16 ***
+longitude                       5.796e-01  6.064e-02   9.557  < 2e-16 ***
+number_of_reviews              -4.187e-04  7.634e-05  -5.485 4.24e-08 ***
+availability_365                2.080e-04  2.860e-05   7.273 3.77e-13 ***
+reviews_per_month              -9.347e-04  2.136e-03  -0.438   0.6616    
+calculated_host_listings_count  3.435e-03  3.417e-04  10.052  < 2e-16 ***
+minimum_nights                 -2.221e-04  1.272e-04  -1.746   0.0809 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.3523 on 10593 degrees of freedom
+Multiple R-squared:  0.3731,    Adjusted R-squared:  0.3726 
+F-statistic: 787.9 on 8 and 10593 DF,  p-value: < 2.2e-16
+\end{Soutput}
+\end{Schunk}
+
 \hypertarget{model-assessment-1}{%
 \subsection{Model assessment}\label{model-assessment-1}}
-
-summary(second\_model)
 
 \hypertarget{evaluation}{%
 \subsection{5. Evaluation}\label{evaluation}}
@@ -1304,7 +1330,7 @@ choose the second model for the prediction.
 \begin{Schunk}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-25-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-26-1} \end{center}
 
 \end{Schunk}
 
@@ -1398,7 +1424,7 @@ fviz_nbclust(customerData2, kmeans, method = "wss") +
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-28-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-29-1} \end{center}
 
 \end{Schunk}
 
@@ -1415,7 +1441,7 @@ fviz_cluster(k2, data = customerData2)
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-29-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-30-1} \end{center}
 
 \end{Schunk}
 
@@ -1444,7 +1470,7 @@ plot(c)
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-31-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-32-1} \end{center}
 
 \end{Schunk}
 
@@ -1501,7 +1527,7 @@ leaflet(group1 %>% select(longitude,latitude)) %>%
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-34-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-35-1} \end{center}
 
 \end{Schunk}
 
@@ -1515,7 +1541,7 @@ leaflet(group2 %>% select(longitude,latitude)) %>%
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-35-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-36-1} \end{center}
 
 \end{Schunk}
 
@@ -1529,7 +1555,7 @@ leaflet(group3 %>% select(longitude,latitude)) %>%
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-36-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-37-1} \end{center}
 
 \end{Schunk}
 
@@ -1543,7 +1569,7 @@ leaflet(group4 %>% select(longitude,latitude)) %>%
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-37-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-38-1} \end{center}
 
 \end{Schunk}
 
@@ -1556,26 +1582,8 @@ Let's observe every group's price distribution.
 \begin{Sinput}
 # histogram with added parameters
 hist(group1$price,
-main="group1Price",
-xlab="group1Price",
-breaks=100000,
-xlim=c(0,500),
-col="darkmagenta",
-freq=FALSE
-)
-\end{Sinput}
-
-
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-38-1} \end{center}
-
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-# histogram with added parameters
-hist(group2$price,
-main="group2Price",
-xlab="group2Price",
+main="group1 price distribution",
+xlab="price",
 breaks=100000,
 xlim=c(0,500),
 col="darkmagenta",
@@ -1591,9 +1599,9 @@ freq=FALSE
 \begin{Schunk}
 \begin{Sinput}
 # histogram with added parameters
-hist(group3$price,
-main="group3Price",
-xlab="group3Price",
+hist(group2$price,
+main="group2 price distribution",
+xlab="price",
 breaks=100000,
 xlim=c(0,500),
 col="darkmagenta",
@@ -1609,9 +1617,9 @@ freq=FALSE
 \begin{Schunk}
 \begin{Sinput}
 # histogram with added parameters
-hist(group4$price,
-main="group4Price",
-xlab="group4Price",
+hist(group3$price,
+main="group3 price distribution",
+xlab="price",
 breaks=100000,
 xlim=c(0,500),
 col="darkmagenta",
@@ -1621,6 +1629,24 @@ freq=FALSE
 
 
 \begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-41-1} \end{center}
+
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+# histogram with added parameters
+hist(group4$price,
+main="group4 price distribution",
+xlab="Price",
+breaks=100000,
+xlim=c(0,500),
+col="darkmagenta",
+freq=FALSE
+)
+\end{Sinput}
+
+
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-42-1} \end{center}
 
 \end{Schunk}
 
@@ -1676,7 +1702,7 @@ freq=FALSE
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-43-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-44-1} \end{center}
 
 \end{Schunk}
 
@@ -1694,16 +1720,16 @@ freq=FALSE
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-44-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-45-1} \end{center}
 
 \end{Schunk}
 
 \begin{Schunk}
 \begin{Sinput}
 # histogram with added parameters
-hist(group2$number_of_reviews,
-main="group2 number_of_reviews",
-xlab="minimum_nights",
+hist(group1$number_of_reviews,
+main="group1 number_of_reviews",
+xlab="number_of_reviews",
 breaks=10000,
 xlim=c(0,500),
 col="darkmagenta",
@@ -1712,7 +1738,25 @@ freq=FALSE
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-45-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-46-1} \end{center}
+
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+# histogram with added parameters
+hist(group2$number_of_reviews,
+main="group2 number_of_reviews",
+xlab="number_of_reviews",
+breaks=10000,
+xlim=c(0,500),
+col="darkmagenta",
+freq=FALSE
+)
+\end{Sinput}
+
+
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-47-1} \end{center}
 
 \end{Schunk}
 
@@ -1730,7 +1774,25 @@ freq=FALSE
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-46-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-48-1} \end{center}
+
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+# histogram with added parameters
+hist(group4$number_of_reviews,
+main="group4 number_of_reviews",
+xlab="number_of_reviews",
+breaks=10000,
+xlim=c(0,500),
+col="darkmagenta",
+freq=FALSE
+)
+\end{Sinput}
+
+
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-49-1} \end{center}
 
 \end{Schunk}
 
@@ -1750,7 +1812,7 @@ freq=FALSE
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-47-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-50-1} \end{center}
 
 \end{Schunk}
 
@@ -1768,7 +1830,7 @@ freq=FALSE
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-48-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-51-1} \end{center}
 
 \end{Schunk}
 
@@ -1786,7 +1848,7 @@ freq=FALSE
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-49-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-52-1} \end{center}
 
 \end{Schunk}
 
@@ -1804,7 +1866,7 @@ freq=FALSE
 \end{Sinput}
 
 
-\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-50-1} \end{center}
+\begin{center}\includegraphics{main_files/figure-latex/unnamed-chunk-53-1} \end{center}
 
 \end{Schunk}
 
@@ -1814,22 +1876,26 @@ summarize every group's characteristic.
 Group1: the rental rate is median.
 
 Group2: the rental rate is high, and the attention is low because there
-are less reviews in this group.Since most of listings in this group are
+are less reviews in this group. Since most of listings in this group are
 located in downtown,they have Convenient transportation.
 
 Group3: the rental rate is high, and the attention is high because there
-are more reviews in this group.Since most of listings in this group are
+are more reviews in this group. Since most of listings in this group are
 located in downtown,they have Convenient transportation.
 
 Group4: the rental rate is low.
 
 Some potential business value: Airbnb can recommeded the listings in
-group 1 for the customers that have high price sensetivity. The listings
-in group2 can be recommended to the customers that prefer the convenient
-transportation and don't mind the attention. The listings in group3 can
-be recommended to the customers that prefer the convenient
-transportation and the high attention. The listings in group4 can be
-recommended to other customers.
+group 1 for the moderate customers.
+
+The listings in group2 can be recommended to the customers that prefer
+the convenient transportation and don't mind the attention.
+
+The listings in group3 can be recommended to the customers that prefer
+the convenient transportation and the high attention.
+
+The listings in group4 can be recommended to the customers that have a
+high sensitivity to price.
 
 \hypertarget{model-deployment}{%
 \section{Model Deployment}\label{model-deployment}}
@@ -1837,12 +1903,11 @@ recommended to other customers.
 In our second regression model, metrics for testing set: R2=0.285 and
 RMSE=42.18. Is it good enough? It is hard to tell. We feel that the
 model meets our first objective, which is prediction of toronto airbnb
-rental rate. The second logistic regression model we picked is more
-accurate. The model is fast and easy to deploy. Due to the nature of the
-business the model does require frequent data updates and re-training.
-We are also very satisfied with accomplishment of our second goal, which
-is understanding of the listing. We believe that clustering make sense
-for business.
+rental rate. The model is fast and easy to deploy. Due to the nature of
+the business the model does require frequent data updates and
+re-training. We are also very satisfied with accomplishment of our
+second goal, which is understanding of the listing. We believe that
+clustering make sense for business.
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}

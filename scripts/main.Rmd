@@ -231,7 +231,7 @@ print(dfSummary(data, valid.col = F, max.distinct.values = 3, heading = F),
 #summary(data)
 #str(data)
 ```
-Table \ref{tab:dataset_summary} describes main statistical parameters of each column. Here is a look at the data sample.
+Table \ref{tab:dataset_summary1} describes main statistical parameters of each column. Here is a look at the data sample.
 
 ```{r data_head, results='asis', echo=FALSE}
 library(xtable) # nice table formats
@@ -245,7 +245,8 @@ print (xtable(data[1:12,9:16],
 
 ## Data quality report
 
-###Missing data
+### Missing data
+
 ```{r plot_notes2,  echo=FALSE, fig.align="center", fig.cap="Missing data"}
 
 a = aggr(data)
@@ -273,26 +274,18 @@ customerData <- customerData %>%
 customerData <- customerData %>% 
   mutate( room_type= as.numeric(room_type) )
 
-#customerData <- customerData %>% 
-#  mutate(last_review = as.numeric(as.Date("2020-02-15")-last_review))
-
-#glimpse(customerData)
-
 ```
 
 We drop neighbourhood_group and other missing data.
-```{r}
 
+```{r}
 customerData1 = subset(customerData,select = -neighbourhood_group)
 customerData1 = customerData1 %>%filter(complete.cases(.)) 
 glimpse(customerData1)
-#b = aggr(customerData1)
-#plot(b)
+
 ```
 
-
-###data visualization
-
+### data visualization
 
 ```{r results='hold'}
 # histogram with added parameters
@@ -361,7 +354,7 @@ plot(p1)
 mytable <- table(customerData1$room_type)
 lbls <-  c("Entire home/apt","Hotel room","Private room","Shared room")
 pie(mytable, labels = lbls,col=rainbow(length(lbls)),
-   main="Pie Chart of room")
+   main="Pie Chart of room type")
    
 ```   
 
@@ -606,9 +599,11 @@ second_model <- lm(log(price) ~ room_type + latitude + longitude
 
 ```
 
-
-## Model assessment
+```{r}
 summary(second_model)
+```
+## Model assessment
+
 
 
 ## 5. Evaluation
@@ -838,8 +833,8 @@ Let's observe every group's price distribution.
 ```{r results='hold'}
 # histogram with added parameters
 hist(group1$price,
-main="group1Price",
-xlab="group1Price",
+main="group1 price distribution",
+xlab="price",
 breaks=100000,
 xlim=c(0,500),
 col="darkmagenta",
@@ -850,8 +845,8 @@ freq=FALSE
 ```{r results='hold'}
 # histogram with added parameters
 hist(group2$price,
-main="group2Price",
-xlab="group2Price",
+main="group2 price distribution",
+xlab="price",
 breaks=100000,
 xlim=c(0,500),
 col="darkmagenta",
@@ -862,8 +857,8 @@ freq=FALSE
 ```{r results='hold'}
 # histogram with added parameters
 hist(group3$price,
-main="group3Price",
-xlab="group3Price",
+main="group3 price distribution",
+xlab="price",
 breaks=100000,
 xlim=c(0,500),
 col="darkmagenta",
@@ -874,8 +869,8 @@ freq=FALSE
 ```{r results='hold'}
 # histogram with added parameters
 hist(group4$price,
-main="group4Price",
-xlab="group4Price",
+main="group4 price distribution",
+xlab="Price",
 breaks=100000,
 xlim=c(0,500),
 col="darkmagenta",
@@ -927,9 +922,22 @@ freq=FALSE
 
 ```{r results='hold'}
 # histogram with added parameters
+hist(group1$number_of_reviews,
+main="group1 number_of_reviews",
+xlab="number_of_reviews",
+breaks=10000,
+xlim=c(0,500),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
+
+```{r results='hold'}
+# histogram with added parameters
 hist(group2$number_of_reviews,
 main="group2 number_of_reviews",
-xlab="minimum_nights",
+xlab="number_of_reviews",
 breaks=10000,
 xlim=c(0,500),
 col="darkmagenta",
@@ -948,6 +956,19 @@ col="darkmagenta",
 freq=FALSE
 )
 ```
+
+```{r results='hold'}
+# histogram with added parameters
+hist(group4$number_of_reviews,
+main="group4 number_of_reviews",
+xlab="number_of_reviews",
+breaks=10000,
+xlim=c(0,500),
+col="darkmagenta",
+freq=FALSE
+)
+```
+
 
 It seems that the group3 has more reviews that group2.
 
@@ -1005,30 +1026,29 @@ Let's summarize every group's characteristic.
 
 Group1: the rental rate is median.
 
-Group2: the rental rate is high, and the attention is low because there are less reviews in this group.Since most of listings in this group are located in downtown,they have Convenient transportation.
+Group2: the rental rate is high, and the attention is low because there are less reviews in this group. Since most of listings in this group are located in downtown,they have Convenient transportation.
 
-Group3: the rental rate is high, and the attention is high because there are more reviews in this group.Since most of listings in this group are located in downtown,they have Convenient transportation.
+Group3: the rental rate is high, and the attention is high because there are more reviews in this group. Since most of listings in this group are located in downtown,they have Convenient transportation.
 
 Group4: the rental rate is low.
 
 Some potential business value:
-Airbnb can recommeded the listings in group 1 for the customers that have high price sensetivity.
+Airbnb can recommeded the listings in group 1 for the moderate customers.
+
 The listings in group2 can be recommended to the customers that prefer the convenient transportation and don't mind the attention.
+
 The listings in group3 can be recommended to the customers that prefer the convenient transportation and the high attention.
-The listings in group4 can be recommended to other customers.
+
+The listings in group4 can be recommended to the customers that have a high sensitivity to price.
 
 
 
 # Model Deployment
 
 
-In our second regression model, metrics for testing set: R2=0.285 and RMSE=42.18. Is it good enough? It is hard to tell. We feel
-that the model meets our first objective, which is prediction of toronto airbnb rental rate.
-The second logistic regression model we picked is more accurate.
+In our second regression model, metrics for testing set: R2=0.285 and RMSE=42.18. Is it good enough? It is hard to tell. We feel that the model meets our first objective, which is prediction of toronto airbnb rental rate.
 The model is fast and easy to deploy. Due to the nature of the business the model does require frequent data updates and
-re-training.
-We are also very satisfied with accomplishment of our second goal, which is understanding of the
-listing. We believe that clustering make sense for business.
+re-training. We are also very satisfied with accomplishment of our second goal, which is understanding of the listing. We believe that clustering make sense for business.
 
 # Conclusion
 
