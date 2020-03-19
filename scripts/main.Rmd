@@ -72,13 +72,46 @@ knitr::opts_chunk$set(fig.pos = 'H', echo = T,comment = NA, prompt = F,
                       cache = F, warning = F, message = F,  fig.align="center")
 ```
 
+## 1. Business Understanding
+
+## 1.1 Determine Business Objectives
 
 ## Background
 
 Airbnb has seen a meteoric growth since its inception in 2008 with the number of rentals listed on its website growing exponentially each year. Airbnb has successfully disrupted the traditional hospitality industry as more and more travellers, not just the ones who are looking for a bang for their buck but also business travellers resort to Airbnb as their premier accommodation provider.
 Toronto has been one of the hottest markets for Airbnb in Canada, with over 26,000 listings as of Feb 2020. This means there are over 40 homes being rented out per square km in Toronto on Airbnb! One can perhaps attribute the success of Airbnb in Toronto to the high rates charged by the hotels, which are primarily driven by the exorbitant rental prices in the city.
 
-## Objective
+## Businnes objectives
+
+* To stablish how do the location, room type, number of reviews, availability, number of reviews, minimum nights and host listing count can affect rental rates. 
+
+* To establish some groups that can be suggested by Airbnb platform for different kind of preferences.
+
+## Business success criteria
+
+Give useful insights for current property owners or future ones to make more effective listing
+
+
+## 1.2 Assess Situation
+
+## Inventory of resources
+
+Machine learning engineers
+  -	Ketao Li, Kush Halani, Josue Romain, Juan Peña	
+
+Public Dataset: license CC0: Public Domain 
+
+-	Toronto AIRBNB open data. Airbnb listing and metrics.
+  [Airbnb](http://insideairbnb.com/get-the-data.html)
+
+GitHub site.
+-	https://github.com/K2J2PGROUP9/
+
+
+## 1.3.	Determine Data Mining Goals
+
+
+## Data minning goals
 
 
 This study pursues two goals. The main objective is to predict the airbnb rental rate as accurate as possible. We will employ CRISP-DM methodology (Ref: \cite{mining}) and supervised learning approach, to achieve this goal.
@@ -89,6 +122,19 @@ We are also motivated to cluster the toronto airbnb listings in groups. The ques
 * If yes, how to use these group information for business.
 
 To achieve the second goal we will use unsupervised learning approach.
+
+
+
+## Data mining success criteria
+
+The success criteria of the model is to select the better accuracy based in the median residual error.
+
+
+## Project plan
+
+
+![PROJECT PLAN](Project Plan.PNG)
+
 
 
 
@@ -129,13 +175,17 @@ When using the model it is good to monitor the performance of it when update the
 
 
 
-# Data Analysis
+## 2 Data Understanding
 
-This research employs the data set sourced from [Airbnb](http://insideairbnb.com/get-the-data.html). This real-life data comprises 26000 observations of the listing information of Toronto on Feb 14,2020.
+## 2.1 Collect initial data
 
+# Initial data collection report 
 
+This research employs the data set sourced from [Airbnb](http://insideairbnb.com/get-the-data.html). This real-life data comprises 26000 observations of the listing information of Toronto on Feb 14,2020 with 16 features.
 
-## Data Dictionary
+## 2.2 Describe data
+
+## Data description report
 
 
 Column Name                   | Column Description  
@@ -157,7 +207,9 @@ reviews_per_month             | total number of reviews divided by the number of
 calculated_host_listings_count| amount of listing per host
 availability_365              | number of days per year the listing is active
 
-## Data Exploration
+## 2.3 Data Exploration
+
+## Data exploration report
 
 ### Statistics
 
@@ -190,7 +242,9 @@ print (xtable(data[1:12,9:16],
   scalebox = .6)
 ```
 
+## 2.4 Verify data quality
 
+## Data quality report
 
 ###Missing data
 ```{r plot_notes2,  echo=FALSE, fig.align="center", fig.cap="Missing data"}
@@ -206,6 +260,8 @@ summary(a)
 There are some missing data for neighbourhood_group,last_review and reviews_per_month.It's very strange that most of the neighbourhood_group miss in Toronto.We decide to ignore this feature. 
 
 ### Data Transformation
+
+## 3. Data preparation
 
 We need do some some data transformation.
 ```{r}
@@ -481,9 +537,29 @@ From the word cloud, we can get some highly frequently used words such as downto
 Unfortunately *name* feature does not provide more knowledge to what the others features already supply. Thus it will be dropped.
 
 
-# Regression Models and Model Performance Evalutation
+## 4. Modeling
 
-In this section we will apply various clustering methods to cluster the customer based rfm. We will use Partitioning clustering and Hierarchical clustering approaches. 
+## 4.1 Select Modeling Technique
+
+## Modeling Technique
+
+As this is a price prediction problem, we are going to use Linear Regresion Model.
+
+## Modeling assumption
+
+The asumptions that the model has are:
+
+* Variables are normally ditributed or transformed into it.
+* No or little multicolinearity. 
+* No Auto-correlation.
+* No homoscedasticty.
+
+
+## 4.2 Generate test design
+
+## Test design
+
+For training purposes we are  going to take 70% of the data and left the 30% for testing.
 
 
 ```{r}
@@ -492,12 +568,20 @@ airbnb_test  <- anti_join(customerData1, airbnb_train, by = 'id') %>% filter(pri
 
 ```
 
+## 4.3 Build the model
+
 ##1st Linear Regression model
 ```{r}
 first_model <- train(price ~ latitude + longitude + room_type + minimum_nights  + availability_365 , data = airbnb_train, method = "lm")
 summary(first_model)
 
 ```
+
+## 4.4 Assess Model
+
+
+## Model assessment
+
 This model is not so good. Median residual error is -22.9, while it should be near 0. R2=0.06 is also not so good.
 
 Let’s plot the first model.
@@ -506,6 +590,9 @@ plot(first_model$finalModel)
 
 
 ```
+
+## 4.3 Build the model
+
 ##2nd Linear Regression model
 ```{r}
 
@@ -514,10 +601,19 @@ second_model <- lm(log(price) ~ room_type + latitude + longitude
                         + number_of_reviews + availability_365
                        + reviews_per_month + 
                      calculated_host_listings_count + minimum_nights, data = learn)
-# Summarize the results
-summary(second_model)
 
 ```
+
+
+## Model assessment
+summary(second_model)
+
+
+## 5. Evaluation
+
+## Aproved model
+
+
 This model is an improvement. Median residual error is now -0.014, which is far better than -22.9 from the first model. R2=0.371 means that this model explains about 50% variance of target variable.
 Obviously we choose the second model for the prediction.
 ```{r plot_feature_selection,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Number of Predictors vs Accuracy", out.width="1.1\\linewidth"}
@@ -570,9 +666,18 @@ ggplotly(regression_plot)
 
 ```
 
+
 # Undertanding the listing Employing Unsupervised Learning
 
-In this section we will apply various clustering methods to cluster the listings in several groups. We will use Partitioning clustering and Hierarchical clustering approaches. 
+
+## 4. Modeling
+
+## 4.1 Select Modeling Technique
+
+## Modeling Technique
+
+In this section we will apply various clustering methods to cluster the listings in several groups. We will use Partitioning clustering and Hierarchical clustering approaches.
+
 
 Before we apply clustering models to the dataset we should assess clustering tendency. In order to do so we will employ **Hopkins** statistics.
 
@@ -611,6 +716,9 @@ print(H[["hopkins_stat"]])
 ```
 Perfect! H value is very close to 1. The dataset is clustrable.
 
+
+## 4.3 Build the model
+
 ## Partitioning Clustering Approach 
 
 At first, we use Elbow method to get optimal number of clusters for k-means clustering:
@@ -644,6 +752,10 @@ customerData3 <- cbind(customerData1, group)
 
 ```
 
+
+
+## 4.3 Build the model
+
 ## Hierarchical clustering approache 
 
 ```{r results='hold'}
@@ -661,6 +773,12 @@ members <- cutree(c,k = 4)
 table(members)
 #members
 ```
+
+
+## 5. Evaluation
+
+## Aproved model
+
 We decide to accept the kmeans cluster result.
 K-means clustering with 4 clusters of sizes group1 = 2649, group2 = 9925, group3 = 2800, group4 = 3649
 ```{r results='hold'}
@@ -878,6 +996,8 @@ col="darkmagenta",
 freq=FALSE
 )
 ```
+
+
 It seems that the group3 has more availability_365 that group2.
 Let's summarize every group's characteristic.
 
@@ -887,10 +1007,12 @@ Group3: the rental rate is high, and the attention is high because there are mor
 Group4: the rental rate is low.
 
 Some potential business value:
-Airbnb can recommeded the listings in group 4 for the customers that have high price sensetivity.
+Airbnb can recommeded the listings in group 1 for the customers that have high price sensetivity.
 The listings in group2 can be recommended to the customers that prefer the convenient transportation and don't mind the attention.
 The listings in group3 can be recommended to the customers that prefer the convenient transportation and the high attention.
 The listings in group4 can be recommended to other customers.
+
+
 
 # Model Deployment
 
